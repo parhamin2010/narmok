@@ -1,0 +1,8 @@
+{
+    "action":"send_notification",
+    "product_id":"246",
+    "nonce":"77f85f26b6",
+    "woocommerce-login-nonce":null,
+    "_wpnonce":null,
+    "woocommerce-reset-password-nonce":null
+}
