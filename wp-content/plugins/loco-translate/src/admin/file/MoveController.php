@@ -15,6 +15,7 @@ class Loco_admin_file_MoveController extends Loco_admin_file_BaseController {
         /* @var Loco_fs_File $file */
         if( $file->exists() && ! $file->isDirectory() ){
             $files = new Loco_fs_Siblings($file);
+            $files->setDomain( $this->getDomain() );
             // nonce action will be specific to file for extra security
             $path = $file->getPath();
             $action = 'move:'.$path;
@@ -98,6 +99,7 @@ class Loco_admin_file_MoveController extends Loco_admin_file_BaseController {
                 if( wp_redirect($href) ){
                     exit;
                 }
+                // end pseudo loop
                 break;
             }
         }
@@ -116,21 +118,22 @@ class Loco_admin_file_MoveController extends Loco_admin_file_BaseController {
             return $fail;
         }
         // relocation requires knowing text domain and locale
+        $files = new Loco_fs_Siblings($file);
         try {
             $project = $this->getProject();
+            $files->setDomain( $project->getDomain()->getName() );
         }
         catch( Loco_error_Exception $e ){
             Loco_error_AdminNotices::warn($e->getMessage());
             $project = null;
         }
-        $files = new Loco_fs_Siblings($file);
         $file = new Loco_fs_LocaleFile( $files->getSource() );
         $locale = $file->getLocale();
         // switch between canonical move and custom file path mode
         $custom = is_null($project) || $this->get('custom') || 'po' !== $file->extension() || ! $locale->isValid();
         // common page elements:
         $this->set('files',$files->expand() );
-        $this->set('title', sprintf( __('Move %s','loco-translate'), $file->filename() ) );
+        $this->setFileTitle($file,__('Move %s','loco-translate'));
         $this->enqueueScript('move');
         // set info for existing file location
         $content_dir = loco_constant('WP_CONTENT_DIR');

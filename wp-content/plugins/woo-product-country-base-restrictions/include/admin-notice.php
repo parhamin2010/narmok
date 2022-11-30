@@ -59,6 +59,8 @@ class CBR_Admin_Notice {
 		//callback for notices hook in admin
 		add_action( 'admin_notices', array( $this, 'cbr_pro_admin_notice' ) );
 		add_action('admin_init', array( $this, 'cbr_pro_plugin_notice_ignore' ) );
+
+		add_action('cbr_settings_admin_notice', array( $this, 'cbr_settings_admin_notice' ) );
 		
 		//add_action( 'admin_notices', array( $this, 'admin_notice_after_update' ) );		
 		//add_action('admin_init', array( $this, 'cbr_plugin_notice_ignore' ) );
@@ -119,6 +121,14 @@ class CBR_Admin_Notice {
 		}
 	}
 
+	public function cbr_settings_admin_notice() {
+		$date_now = gmdate( 'Y-m-d' );
+		if ( $date_now > '2022-06-30' ) {
+			return;
+		}
+		include 'views/admin_message_panel.php';
+	}
+
 	
 	/**
 	 * CBR pro admin notice
@@ -134,7 +144,7 @@ class CBR_Admin_Notice {
 		echo '<div class="updated notice"><h3 style="margin-bottom: 0;">Country Based Restriction Pro</h3><p>'. __( $message ) .' 
 		<span style="display: block; margin: 0.5em 0.5em 0 0; clear: both;">
 			<a class ="button-secondary" href="https://www.zorem.com/products/country-based-restriction-pro/" target="_blank">Upgrade to Pro</a>
-			<a class ="button-secondary" href="?cbr-pro-plugin-ignore-notice=true" class="dismiss-notice" target="_parent">Dismiss this notice</a></span>
+			<a class ="button-secondary" href="' . esc_url(  add_query_arg( 'cbr-pro-plugin-ignore-notice', 'true' ) ) . '" class="dismiss-notice" target="_parent">Dismiss this notice</a></span>
 		</p></div>';
 	}
 	

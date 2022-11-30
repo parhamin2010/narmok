@@ -334,7 +334,7 @@ return false;
 
 if ( ! function_exists( 'open_shop_below_footer_markup' ) ){  
 function open_shop_below_footer_markup(){ ?>   
-<div class="below-footer">
+<div class="below-footer always-show">
       <div class="container">
         <div class="below-footer-bar thnk-col-1">
           <div class="below-footer-col1"> 

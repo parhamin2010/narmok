@@ -9,28 +9,23 @@ import {
 	useInnerBlockLayoutContext,
 	useProductDataContext,
 } from '@woocommerce/shared-context';
+import { useColorProps, useTypographyProps } from '@woocommerce/base-hooks';
 import { withProductDataContext } from '@woocommerce/shared-hocs';
 
 /**
  * Internal dependencies
  */
-import {
-	useColorProps,
-	useTypographyProps,
-} from '../../../../hooks/style-attributes';
 
 /**
  * Product Price Block Component.
  *
- * @param {Object} props                          Incoming props.
- * @param {string} [props.className]              CSS Class name for the component.
- * @param {string} [props.textAlign]              Text alignment.
- * @param {string} [props.fontSize]               Normal Price font size name.
- * @param {string} [props.color]                  Normal Price text color.
- * context will be used if this is not provided.
+ * @param {Object} props             Incoming props.
+ * @param {string} [props.className] CSS Class name for the component.
+ * @param {string} [props.textAlign] Text alignment.
+ *                                   context will be used if this is not provided.
  * @return {*} The component.
  */
-const Block = ( props ) => {
+export const Block = ( props ) => {
 	const { className, textAlign } = props;
 	const { parentClassName } = useInnerBlockLayoutContext();
 	const { product } = useProductDataContext();
@@ -81,7 +76,8 @@ const Block = ( props ) => {
 			// This is the regular or original price when the `price` value is a sale price.
 			regularPrice={ prices.regular_price }
 			regularPriceClassName={ classnames( {
-				[ `${ parentClassName }__product-price__regular` ]: parentClassName,
+				[ `${ parentClassName }__product-price__regular` ]:
+					parentClassName,
 			} ) }
 		/>
 	);
@@ -91,10 +87,6 @@ Block.propTypes = {
 	className: PropTypes.string,
 	product: PropTypes.object,
 	textAlign: PropTypes.oneOf( [ 'left', 'right', 'center' ] ),
-	fontSize: PropTypes.string,
-	fontWidth: PropTypes.string,
-	fontStyle: PropTypes.string,
-	color: PropTypes.string,
 };
 
 export default withProductDataContext( Block );

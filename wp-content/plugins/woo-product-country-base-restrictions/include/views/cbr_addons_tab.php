@@ -72,7 +72,7 @@ $pro_plugins = array(
 							<li>Payment Gateway by Country</li>
 							<li>Bulk import Restrictions</li>
 						</ul>
-						<a href="https://www.zorem.com/product/advanced-local-pickup-for-woocommerce/?utm_source=wp-admin&utm_medium=ALPPRO&utm_campaign=add-ons" class="install-now button-primary pro-btn" target="blank">UPGRADE NOW</a>	
+						<a href="https://www.zorem.com/product/country-based-restriction-pro/?utm_source=wp-admin&utm_medium=CBRPRO&utm_campaign=add-ons" class="install-now button-primary pro-btn" target="blank">UPGRADE NOW</a>	
 					</div>
 					<div class="col cbr-pro-image">
 						<img src="<?php echo esc_url($fzpcr->plugin_dir_url() . 'assets/images/addon-banner.jpg'); ?>" width="100%">

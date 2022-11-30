@@ -87,8 +87,8 @@ if ( ! class_exists( 'Open_Shop_Woocommerce_Ext' ) ) :
 		              'description'   => esc_html__( 'Add widgets here to appear in your WooCommerce Sidebar.', 'open-shop' ),
 		              'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="open-shop-widget-content">',
 		'after_widget'  => '</div></div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	        ) );
 			register_sidebar(array(
 		              'name'          => esc_html__( 'Product Sidebar', 'open-shop' ),
@@ -96,8 +96,8 @@ if ( ! class_exists( 'Open_Shop_Woocommerce_Ext' ) ) :
 		              'description'   => esc_html__( 'This sidebar will be used on Single Product page.', 'open-shop' ),
 		              'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="open-shop-widget-content">',
 		'after_widget'  => '</div></div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	        ) );
 	        
 		}

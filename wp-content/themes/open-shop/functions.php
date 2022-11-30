@@ -11,7 +11,7 @@
  * Theme functions and definitions
  */
 if ( ! function_exists( 'open_shop_setup' ) ) :
-define( 'OPEN_SHOP_THEME_VERSION','1.0.0');
+define( 'OPEN_SHOP_THEME_VERSION','1.4.3');
 define( 'OPEN_SHOP_THEME_DIR', get_template_directory() . '/' );
 define( 'OPEN_SHOP_THEME_URI', get_template_directory_uri() . '/' );
 define( 'OPEN_SHOP_THEME_SETTINGS', 'open-shop-settings' );
@@ -154,6 +154,12 @@ define( 'OPEN_SHOP_THEME_SETTINGS', 'open-shop-settings' );
                  'img' => 'icon-128x128.png',
                 'active_filename' => 'wp-popup-builder/wp-popup-builder.php',
             ), 
+			
+			'unlimited-blocks' => array(
+				'name' => esc_html__( 'Unlimited blocks For Gutenberg', 'open-shop' ),
+				'img' => 'icon-128x128.png',
+				'active_filename' => 'unlimited-blocks/unlimited-blocks.php',
+				),
             'woocommerce' => array(
                 'name' => esc_html__( 'Woocommerce', 'open-shop' ),
                  'img' => 'icon-128x128.png',
@@ -239,8 +245,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in your primary sidebar.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="open-shop-widget-content">',
 		'after_widget'  => '</div></div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	register_sidebar(array(
 		'name'          => esc_html__( 'Above Header First Widget', 'open-shop' ),
@@ -248,8 +254,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top header.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	register_sidebar(array(
 		'name'          => esc_html__( 'Above Header Second Widget', 'open-shop' ),
@@ -257,8 +263,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top header.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	register_sidebar(array(
 		'name'          => esc_html__( 'Above Header Third Widget', 'open-shop' ),
@@ -266,8 +272,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top header.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 
 	register_sidebar(array(
@@ -276,8 +282,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in main header.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
     register_sidebar(array(
 		'name'          => esc_html__( 'Footer Top First Widget', 'open-shop' ),
@@ -285,8 +291,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top footer.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	register_sidebar(array(
 		'name'          => esc_html__( 'Footer Top Second Widget', 'open-shop' ),
@@ -294,8 +300,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top footer.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	register_sidebar(array(
 		'name'          => esc_html__( 'Footer Top Third Widget', 'open-shop' ),
@@ -303,8 +309,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top footer.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	register_sidebar(array(
 		'name'          => esc_html__( 'Footer Below First Widget', 'open-shop' ),
@@ -312,8 +318,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top footer.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	register_sidebar(array(
 		'name'          => esc_html__( 'Footer Below Second Widget', 'open-shop' ),
@@ -321,8 +327,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top footer.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	register_sidebar(array(
 		'name'          => esc_html__( 'Footer Below Third Widget', 'open-shop' ),
@@ -330,8 +336,8 @@ function open_shop_widgets_init(){
 		'description'   => esc_html__( 'Add widgets here to appear in top footer.', 'open-shop' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
 	) );
 	for ( $i = 1; $i <= 4; $i++ ){
 		register_sidebar( array(
@@ -339,8 +345,8 @@ function open_shop_widgets_init(){
 			'id'            => 'footer-' . $i,
 			'before_widget' => '<div id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</div>',
-			'before_title'  => '<h2 class="widget-title">',
-			'after_title'   => '</h2>',
+			'before_title'  => '<h4 class="widget-title">',
+			'after_title'   => '</h4>',
 		) );
 	}
 	
@@ -411,4 +417,11 @@ require_once trailingslashit(OPEN_SHOP_THEME_DIR).'inc/init.php';
 //custom function conditional check for blog page
 function open_shop_is_blog(){
     return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
+}
+
+if ( !empty(get_option( 'theme_mods_openshop-pro')) ) {
+function open_shop_theme_switch() {
+    update_option( 'theme_mods_openshop-pro', get_option( 'theme_mods_open-shop') );
+}
+add_action('switch_theme', 'open_shop_theme_switch');
 }

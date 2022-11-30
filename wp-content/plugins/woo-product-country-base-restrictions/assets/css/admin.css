@@ -2,6 +2,26 @@
 .zorem-layout__header * {
     box-sizing: border-box;
 }
+.zorem-layout__header .page_heading {
+    font-size: 14px;
+    color: #3c4758;
+    padding: 0 20px;
+    margin: auto 0;
+    font-weight: 400;
+}
+.zorem-layout__header .page_heading .dashicons {
+    font-size: 14px;
+    vertical-align: middle;
+    line-height: 20px;
+}
+.zorem-layout__header .page_heading a {
+    text-decoration: none;
+}
+.zorem-layout__header .zorem-layout__header-logo {
+    padding: 0 20px;
+    margin: auto 0;
+    height: 40px;
+}
 .zorem-layout__header {
     background: #fff;
     display: flex;
@@ -15,19 +35,12 @@
     top: 32px;
     z-index: 1001;
 }
-.zorem-layout__header .zorem-layout__header-logo {
-    padding: 0 20px;
-    margin: auto 0;
-    height: 40px;
-}
 .woocommerce-layout__activity-panel-tabs .dashicons-editor-help:before {
     color: #013047;
 }
 .woocommerce-layout__activity-panel-tabs {
-    width: 100%;
-    display: flex;
-    height: 60px;
-    justify-content: flex-end;
+    right: 0;
+    position: absolute;
 }
 .woocommerce-layout__activity-panel-tabs .dashicons{
 	width: 24px;
@@ -43,14 +56,14 @@
     border: none;
     outline: none;
     cursor: pointer;
-    background-color: #fff;
+    background-color: transparent;
     max-width: -webkit-min-content;
     max-width: min-content;
     min-width: 80px;
     width: 100%;
-    height: 60px;
-    color: #03aa6f;
+    color: #757575;
     white-space: nowrap;
+    height: 44px;
 }
 .woocommerce-layout__activity-panel-tabs .woocommerce-layout__activity-panel-tab:before {
     background-color: #005b9a;
@@ -177,6 +190,41 @@
 	}
 }
 /*header style end*/
+/*admin message style */
+.admin-message-panel {
+    background: #fff;    
+    padding: 1px;    
+}
+.admin_message_header{
+	font-size: 18px;
+    line-height: 20px;
+    margin: 0;
+    font-weight: 500;
+    color: #212121;
+}
+.admin-message-panel .admin-message-row{
+	padding: 15px;
+    background: #d5fff0;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    margin: 0 20px 20px;
+}
+.admin-message-panel p{
+    color: #212121;
+}
+.button-primary.btn_pro_notice {
+	background: #03aa6f;
+    border-color: #03aa6f;
+    text-transform: uppercase;
+}
+.button-primary.btn_pro_notice:hover, .button-primary.btn_pro_notice:focus {
+	background: #03aa6f;
+    border-color: rgba(0,0,0,0.05);
+    color: #fff;
+    text-shadow: none;
+    box-shadow: inset 0 0 0 100px rgb(0 0 0 / 10%);
+}
+/* admin message style end */
 .cbr_admin_content {
     margin: 0 20px;
     vertical-align: top;

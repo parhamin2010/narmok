@@ -2,7 +2,8 @@
  * Internal dependencies
  */
 import { CurrencyResponse } from './currency';
-import { CartItem } from './cart';
+import type { CartItem } from './cart';
+import type { ProductResponseItem } from './product-response';
 
 export interface CartResponseTotalsItem extends CurrencyResponse {
 	total_discount: string;
@@ -170,6 +171,7 @@ export interface CartResponse {
 	items: Array< CartResponseItem >;
 	items_count: number;
 	items_weight: number;
+	cross_sells: Array< ProductResponseItem >;
 	needs_payment: boolean;
 	needs_shipping: boolean;
 	has_calculated_shipping: boolean;

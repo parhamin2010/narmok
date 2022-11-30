@@ -1,11 +1,12 @@
 /**
  * External dependencies
  */
-import { useMemo, useRef } from '@wordpress/element';
+import { useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { CURRENT_USER_IS_ADMIN } from '@woocommerce/settings';
 import deprecated from '@wordpress/deprecated';
-import isShallowEqual, { ComparableObject } from '@wordpress/is-shallow-equal';
+import isShallowEqual from '@wordpress/is-shallow-equal';
+import type { ComparableObject } from '@wordpress/is-shallow-equal';
 import { isNull, isObject, objectHasProp } from '@woocommerce/types';
 
 /**
@@ -32,6 +33,7 @@ let checkoutFilters: Record<
 	Record< string, CheckoutFilterFunction >
 > = {};
 
+const cachedValues: Record< string, T > = {};
 /**
  * Register filters for a specific extension.
  */
@@ -48,8 +50,7 @@ export const __experimentalRegisterCheckoutFilters = (
 		deprecated( 'snackbarNotices', {
 			alternative: 'snackbarNoticeVisibility',
 			plugin: 'WooCommerce Blocks',
-			link:
-				'https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4417',
+			link: 'https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4417',
 		} );
 	}
 
@@ -62,8 +63,7 @@ export const __experimentalRegisterCheckoutFilters = (
 		deprecated( 'couponName', {
 			alternative: 'coupons',
 			plugin: 'WooCommerce Blocks',
-			link:
-				'https://github.com/woocommerce/woocommerce-gutenberg-products-block/blob/bb921d21f42e21f38df2b1c87b48e07aa4cb0538/docs/extensibility/available-filters.md#coupons',
+			link: 'https://github.com/woocommerce/woocommerce-gutenberg-products-block/blob/bb921d21f42e21f38df2b1c87b48e07aa4cb0538/docs/extensibility/available-filters.md#coupons',
 		} );
 	}
 
@@ -76,7 +76,7 @@ export const __experimentalRegisterCheckoutFilters = (
 /**
  * Get all filters with a specific name.
  *
- * @param {string} filterName   Name of the filter to search for.
+ * @param {string} filterName Name of the filter to search for.
  * @return {Function[]} Array of functions that are registered for that filter
  *                      name.
  */
@@ -93,17 +93,20 @@ const cachedFilterRuns: Record<
 	{
 		arg?: CheckoutFilterArguments;
 		extensions?: Record< string, unknown > | null;
+		defaultValue: unknown;
 	} & Record< string, unknown >
 > = {};
 
-const updatePreviousFilterRun = (
+const updatePreviousFilterRun = < T >(
 	filterName: string,
 	arg: CheckoutFilterArguments,
-	extensions: Record< string, unknown > | null
+	extensions: Record< string, unknown > | null,
+	defaultValue: T
 ): void => {
 	cachedFilterRuns[ filterName ] = {
 		arg,
 		extensions,
+		defaultValue,
 	};
 };
 
@@ -143,27 +146,36 @@ const checkMembersShallowEqual = <
  * If they are shallowly equal, then return the cached value and prevent third party code running. If they are
  * different then the third party filters are run and the result is cached.
  */
-const shouldReRunFilters = (
+const shouldReRunFilters = < T >(
 	filterName: string,
 	arg: CheckoutFilterArguments,
-	extensions: Record< string, unknown > | null
+	extensions: Record< string, unknown > | null,
+	defaultValue: T
 ): boolean => {
 	const previousFilterRun = cachedFilterRuns[ filterName ];
 
 	if ( ! previousFilterRun ) {
 		// This is the first time the filter is running so let it continue;
-		updatePreviousFilterRun( filterName, arg, extensions );
+		updatePreviousFilterRun( filterName, arg, extensions, defaultValue );
 		return true;
 	}
 	const {
 		arg: previousArg = {} as Record< string, unknown >,
 		extensions: previousExtensions = {} as Record< string, unknown >,
+		defaultValue: previousDefaultValue = null,
 	} = previousFilterRun;
 
 	// Check length of arg and previousArg, and that all keys are present in both arg and previousArg
 	const argIsEqual = checkMembersShallowEqual( arg, previousArg );
 	if ( ! argIsEqual ) {
-		updatePreviousFilterRun( filterName, arg, extensions );
+		updatePreviousFilterRun( filterName, arg, extensions, defaultValue );
+		return true;
+	}
+
+	// Check length of arg and previousArg, and that all keys are present in both arg and previousArg
+	const defaultValueIsEqual = defaultValue === previousDefaultValue;
+	if ( ! defaultValueIsEqual ) {
+		updatePreviousFilterRun( filterName, arg, extensions, defaultValue );
 		return true;
 	}
 
@@ -172,7 +184,7 @@ const shouldReRunFilters = (
 		previousExtensions
 	);
 	if ( ! extensionsIsEqual ) {
-		updatePreviousFilterRun( filterName, arg, extensions );
+		updatePreviousFilterRun( filterName, arg, extensions, defaultValue );
 		return true;
 	}
 	return false;
@@ -199,14 +211,12 @@ export const __experimentalApplyCheckoutFilter = < T >( {
 	/** Function that needs to return true when the filtered value is passed in order for the filter to be applied. */
 	validation?: ( value: T ) => true | Error;
 } ): T => {
-	const cachedValues = useRef< Record< string, T > >( {} );
-
 	return useMemo( () => {
 		if (
-			! shouldReRunFilters( filterName, arg, extensions ) &&
-			cachedValues.current[ filterName ] !== undefined
+			! shouldReRunFilters( filterName, arg, extensions, defaultValue ) &&
+			cachedValues[ filterName ] !== undefined
 		) {
-			return cachedValues.current[ filterName ];
+			return cachedValues[ filterName ];
 		}
 		const filters = getCheckoutFilters( filterName );
 		let value = defaultValue;
@@ -236,7 +246,7 @@ export const __experimentalApplyCheckoutFilter = < T >( {
 				}
 			}
 		} );
-		cachedValues.current[ filterName ] = value;
+		cachedValues[ filterName ] = value;
 		return value;
-	}, [ filterName, defaultValue, extensions, arg, validation ] );
+	}, [ arg, defaultValue, extensions, filterName, validation ] );
 };

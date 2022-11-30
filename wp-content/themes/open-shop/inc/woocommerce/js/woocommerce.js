@@ -38,6 +38,14 @@
                 }
               
             });
+            jQuery("footer .below-footer,footer .below-footer-bar,.always-show .below-footer-col1,.always-show p,footer .container").attr('style', 'display: block !important');
+            jQuery(".below-footer span").attr('style', 'display: inline-block !important');
+          if (jQuery("footer .below-footer").length) {
+            jQuery("footer .widget-footer,footer .top-footer").show();
+          }
+          else{
+            jQuery("footer .widget-footer,footer .top-footer").hide();
+          }
         },
         OffCanvas: function () {
                    var off_canvas_wrapper = $( '.open-shop-off-canvas-sidebar-wrapper');

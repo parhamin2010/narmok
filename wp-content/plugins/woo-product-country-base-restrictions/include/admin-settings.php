@@ -156,12 +156,17 @@ class CBR_Admin_Settings {
 		$tab = isset( $_GET['tab'] ) ? sanitize_text_field($_GET['tab']) : '';
 		?>
 		<div class="zorem-layout__header">
-			<img class="zorem-layout__header-logo" src="<?php echo esc_url($fzpcr->plugin_dir_url() . 'assets/images/cbr-logo.png'); ?>">			
-			<div class="woocommerce-layout__activity-panel">
+			<h1 class="page_heading">
+				<a href="javascript:void(0)"><?php esc_html_e( 'Country Based Restriction', 'advanced-local-pickup-for-woocommerce' ); ?></a> <span class="dashicons dashicons-arrow-right-alt2"></span> <span class="breadcums_page_heading"><?php $tab == 'go-pro' ? esc_html_e( 'Go Pro', 'advanced-local-pickup-for-woocommerce' ) : esc_html_e( 'Settings', 'advanced-local-pickup-for-woocommerce' ); ?></span>
+			</h1>	
+			<img class="zorem-layout__header-logo" src="<?php echo esc_url($fzpcr->plugin_dir_url() . 'assets/images/cbr-icon.png'); ?>">
+		</div>
+		<?php do_action( 'cbr_settings_admin_notice' ); ?>
+		<div class="woocommerce cbr_admin_layout">
+		<div class="woocommerce-layout__activity-panel">
 				<div class="woocommerce-layout__activity-panel-tabs">
 					<button type="button" id="activity-panel-tab-help" class="components-button woocommerce-layout__activity-panel-tab">
-						<span class="dashicons dashicons-editor-help"></span>
-						Help 
+						<span class="dashicons dashicons-menu-alt"></span> 
 					</button>
 				</div>
 				<div class="woocommerce-layout__activity-panel-wrapper">
@@ -210,9 +215,7 @@ class CBR_Admin_Settings {
 						</div>
 					</div>
 				</div>
-			</div>	
-		</div>
-		<div class="woocommerce cbr_admin_layout">
+			</div>
 			<div class="cbr_admin_content">
 				<input id="tab1" type="radio" name="tabs" class="cbr_tab_input" data-tab="settings" data-label="<?php _e('Settings', 'woocommerce'); ?>" checked>
 				<label for="tab1" class="cbr_tab_label first_label" ><?php _e('Settings', 'woocommerce'); ?></label>

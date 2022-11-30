@@ -208,7 +208,7 @@ jQuery(document).on("click", ".cbr_tab_input", function(){
 	"use strict";
 	var tab = jQuery(this).data('tab');
 	var label = jQuery(this).data('label');
-	jQuery('.zorem-layout__header-breadcrumbs .header-breadcrumbs-last').text(label);
+	jQuery('.zorem-layout__header .breadcums_page_heading').text(label);
 	var url = window.location.protocol + "//" + window.location.host + window.location.pathname+"?page=woocommerce-product-country-base-restrictions&tab="+tab;
 	window.history.pushState({path:url},'',url);
 	jQuery(window).trigger('resize');	
