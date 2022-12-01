@@ -1,0 +1,165 @@
+<?php
+/**
+ * Class WOOMULTI_CURRENCY_Admin_Shipping
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class WOOMULTI_CURRENCY_Admin_Shipping {
+	protected $settings;
+	protected $flat_rate_processed = false;
+	protected $free_shipping_processed = false;
+
+	public function __construct() {
+		$this->settings = WOOMULTI_CURRENCY_Data::get_ins();
+		if ( $this->settings->check_fixed_price() ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+			/*Free shipping*/
+			add_filter( 'woocommerce_shipping_instance_form_fields_free_shipping', array(
+				$this,
+				'woocommerce_shipping_instance_form_fields_free_shipping'
+			) );
+			add_filter( 'woocommerce_shipping_free_shipping_instance_settings_values', array(
+				$this,
+				'woocommerce_shipping_free_shipping_instance_settings_values'
+			) );
+			/*Flat rate*/
+			add_filter( 'woocommerce_shipping_instance_form_fields_flat_rate', array(
+				$this,
+				'woocommerce_shipping_instance_form_fields_flat_rate'
+			) );
+			add_filter( 'woocommerce_shipping_flat_rate_instance_settings_values', array(
+				$this,
+				'woocommerce_shipping_flat_rate_instance_settings_values'
+			) );
+		}
+	}
+
+	public function admin_enqueue_scripts() {
+		global $pagenow;
+		if ( $pagenow === 'admin.php' ) {
+			$page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+			$tab  = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
+			if ( $page === 'wc-settings' && $tab === 'shipping' ) {
+				wp_enqueue_script( 'woocommerce-multi-currency-admin-shipping', WOOMULTI_CURRENCY_JS . 'admin-shipping.js', array( 'jquery' ), WOOMULTI_CURRENCY_VERSION );
+				wp_localize_script( 'woocommerce-multi-currency-admin-shipping', 'woocommerce_multi_currency_admin_shipping', array(
+					'currencies' => $this->settings->get_currencies(),
+				) );
+			}
+		}
+	}
+
+	/**
+	 * Remove fixed min_amount field if a currency not existing or is the default currency
+	 *
+	 * @param $instance_settings
+	 *
+	 * @return mixed
+	 */
+	public function woocommerce_shipping_free_shipping_instance_settings_values( $instance_settings ) {
+		$currencies       = $this->settings->get_currencies();
+		$default_currency = $this->settings->get_default_currency();
+		foreach ( $instance_settings as $key => $value ) {
+			if ( substr( $key, 0, 11 ) === 'min_amount_' ) {
+				$currency = substr( $key, 11, 3 );
+				if ( $currency === $default_currency || ! in_array( $currency, $currencies ) ) {
+					unset( $instance_settings[ $key ] );
+				}
+			}
+		}
+
+		return $instance_settings;
+	}
+
+	/**
+	 * Add fixed min_amount for other currencies
+	 *
+	 * @param $fields
+	 *
+	 * @return array
+	 */
+	public function woocommerce_shipping_instance_form_fields_free_shipping( $fields ) {
+		if ( $this->free_shipping_processed ) {
+			return $fields;
+		}
+		$this->free_shipping_processed = true;
+		$modified_fields               = array();
+		$currencies                    = $this->settings->get_currencies();
+		$default_currency              = $this->settings->get_default_currency();
+		foreach ( $fields as $key => $field ) {
+			$modified_fields[ $key ] = $field;
+			if ( $key === 'min_amount' ) {
+				$this->add_fixed_price_fields( $key, $field, $currencies, $default_currency, $modified_fields, sprintf( __( 'Converted from %s if empty', 'woocommerce-multi-currency' ), $default_currency ) );
+			}
+		}
+
+		return $modified_fields;
+	}
+
+	/**
+	 * Remove fixed cost field if a currency not existing or is the default currency
+	 *
+	 * @param $instance_settings
+	 *
+	 * @return mixed
+	 */
+	public function woocommerce_shipping_flat_rate_instance_settings_values( $instance_settings ) {
+		$currencies       = $this->settings->get_currencies();
+		$default_currency = $this->settings->get_default_currency();
+		foreach ( $instance_settings as $key => $value ) {
+			if ( substr( $key, 0, 5 ) === 'cost_' || substr( $key, 0, 14 ) === 'no_class_cost_' || ( substr( $key, 0, 11 ) === 'class_cost_' ) && count( explode( '_', $key ) ) === 4 ) {
+				$currency = substr( $key, strlen( $key ) - 3, 3 );
+				if ( $currency === $default_currency || ! in_array( $currency, $currencies ) ) {
+					unset( $instance_settings[ $key ] );
+				}
+			}
+		}
+
+		return $instance_settings;
+	}
+
+	/**
+	 * Add fixed cost for other currencies
+	 *
+	 * @param $fields
+	 *
+	 * @return array
+	 */
+	public function woocommerce_shipping_instance_form_fields_flat_rate( $fields ) {
+		if ( $this->flat_rate_processed ) {
+			return $fields;
+		}
+		$this->flat_rate_processed = true;
+		$modified_fields           = array();
+		$currencies                = $this->settings->get_currencies();
+		$default_currency          = $this->settings->get_default_currency();
+		foreach ( $fields as $key => $field ) {
+			$modified_fields[ $key ] = $field;
+			if ( $key === 'cost' || $key === 'no_class_cost' || substr( $key, 0, 11 ) === 'class_cost_' ) {
+				$this->add_fixed_price_fields( $key, $field, $currencies, $default_currency, $modified_fields, false, sprintf( __( 'If this field is not explicitly set but {default_field} is, the whole shipping cost in {current_currency} will be calculated by converting from %s', 'woocommerce-multi-currency' ), $default_currency ), __( 'Formula can also be used here. [cost] is already in {current_currency} and [fee] is calculated based on fee in {current_currency}. Other amounts entered here such as a fixed amount, min_fee, max_fee... should be in this currency({current_currency}) already.', 'woocommerce-multi-currency' ) );
+			}
+		}
+
+		return $modified_fields;
+	}
+
+	private function add_fixed_price_fields( $key, $field, $currencies, $default_currency, &$modified_fields, $placeholder = false, $description = '', $desc_tip = false ) {
+		$modified_fields[ $key ]['title'] .= sprintf( __( '(%s)', 'woocommerce-multi-currency' ), $default_currency );
+		foreach ( $currencies as $currency ) {
+			if ( $currency !== $default_currency ) {
+				$modified_fields["{$key}_{$currency}"]                = $field;
+				$modified_fields["{$key}_{$currency}"]['title']       = sprintf( __( '%s(%s)', 'woocommerce-multi-currency' ), $field['title'], $currency );
+				$modified_fields["{$key}_{$currency}"]['description'] = str_replace( array(
+					'{current_currency}',
+					'{default_field}'
+				), array( $currency, $modified_fields[ $key ]['title'] ), $description );
+				$modified_fields["{$key}_{$currency}"]['desc_tip']    = $desc_tip ? str_replace( array( '{current_currency}' ), array( $currency ), $desc_tip ) : $desc_tip;
+				$modified_fields["{$key}_{$currency}"]['default']     = '';
+				if ( $placeholder !== false ) {
+					$modified_fields["{$key}_{$currency}"]['placeholder'] = $placeholder;
+				}
+			}
+		}
+	}
+}
