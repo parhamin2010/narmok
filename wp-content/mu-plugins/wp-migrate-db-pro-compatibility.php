@@ -1,10 +1,18 @@
 <?php
 /*
+<<<<<<< HEAD
 Plugin Name: WP Migrate Lite Compatibility
 Plugin URI: http://deliciousbrains.com/wp-migrate-db-pro/
 Description: Prevents 3rd party plugins from being loaded during WP Migrate DB specific operations
 Author: Delicious Brains
 Version: 1.3
+=======
+Plugin Name: WP Migrate DB Pro Compatibility
+Plugin URI: http://deliciousbrains.com/wp-migrate-db-pro/
+Description: Prevents 3rd party plugins from being loaded during WP Migrate DB specific operations
+Author: Delicious Brains
+Version: 1.2
+>>>>>>> 48b9fe61998eec016c6013f6e02b455ad08b0d15
 Author URI: http://deliciousbrains.com
 */
 
@@ -41,6 +49,10 @@ if ( file_exists( $wpmdbpro_compatibility_class ) ) {
 }
 
 if ( class_exists( $compat_class_name ) ) {
+<<<<<<< HEAD
 	$compatibility = new $compat_class_name;
 	$compatibility->register();
+=======
+	new $compat_class_name;
+>>>>>>> 48b9fe61998eec016c6013f6e02b455ad08b0d15
 }

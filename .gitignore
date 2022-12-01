@@ -48,3 +48,6 @@ Thumbs.db
 *.mov
 *.wmv
 
+
+wp-config.php
+.htaccess
