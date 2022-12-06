@@ -1,0 +1,9 @@
+2022-11-14T10:24:40+00:00 CRITICAL Uncaught Exception: Could not find asset registry for wp-admin-scripts in C:\Projects\narmok\APP\narmok\wp-content\plugins\woocommerce\packages\woocommerce-admin\src\Loader.php:281
+Stack trace:
+#0 C:\Projects\narmok\APP\narmok\wp-content\plugins\woocommerce\packages\woocommerce-admin\src-internal\Admin\WCPayPromotion\Init.php(48): Automattic\WooCommerce\Admin\Loader::get_script_asset_filename('wp-admin-script...', 'payment-method-...')
+#1 C:\Projects\narmok\APP\narmok\wp-content\plugins\woocommerce\packages\woocommerce-admin\src\Features\Features.php(137): Automattic\WooCommerce\Internal\Admin\WCPayPromotion\Init->__construct()
+#2 C:\Projects\narmok\APP\narmok\wp-includes\class-wp-hook.php(307): Automattic\WooCommerce\Admin\Features\Features::load_features('')
+#3 C:\Projects\narmok\APP\narmok\wp-includes\class-wp-hook.php(331): WP_Hook->apply_filters(NULL, Array)
+#4 C:\Projects\narmok\APP\narmok\wp-includes\plugin.php(474): WP_Hook->do_action(Array)
+#5 C:\Projects\narmok\APP\narmok\wp-settings.php(587): do_ac in C:\Projects\narmok\APP\narmok\wp-content\plugins\woocommerce\packages\woocommerce-admin\src\Loader.php on line 281
+
