@@ -114,28 +114,20 @@ class OD_NOTIFICATION{
         $mail_template = $this->get_mail_template("do_lottery",$replacement);
         $mail_title = "Don't miss this Lottery";
 
-        foreach($users_product['user_details'] as $user_email){
-            $users[] = mail($user_email, $mail_title, $user_email);
-        }
-        
-        
         $dest = "parhamin2010@gmail.com";
-        $subjetc = "Test Email";
+        $subject = "Test Email";
         $body = $this->get_mail_template('do_lottery',$replacement);
+        $headers = "Content-Type: text/html; charset=UTF-8\r\n";
 
-        $headers = "From: YourGmailId@gmail.com";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-        if (
-            // mail($dest, $subjetc, $body, $headers)
-            // or
-            true
-            ) {
-            echo "Email successfully sent to $dest ...";
-        } else {
-            echo "Failed to send email...";
+        foreach($users_product['user_details'] as $user_email){
+            $users[] = wp_mail($user_email, $subject, $body, $headers);
         }
-        wp_send_json_success(array('error' => '', 'data' => $users));
+        
+        if (!empty($users)) {
+            wp_send_json_success(array('error' => 'email sent!', 'data' => $users));
+        } else {
+            wp_send_json_success(array('error' => 'email failed!', 'data' => null));
+        }
         exit;
     }
 
